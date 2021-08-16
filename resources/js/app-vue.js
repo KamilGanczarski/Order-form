@@ -1,7 +1,49 @@
 var app = new Vue({
     el: '#App-vue',
     data: {
-        asd: 1,
+        price_native: 115,
+        price:  115,
+
+        // User data
+        create_new_account: false,
+        login: '',
+        password: '',
+        repeat_password: '',
+        name: '',
+        surname: '',
+        selected_country: '',
+        address: '',
+        postcode: '',
+        town: '',
+        phone: '',
+
+        // Place an Order for Delivery
+        another_delivery_place: false,
+        delivery_country: '',
+        delivery_address: '',
+        delivery_postcode: '',
+        delivery_town: '',
+        
+        // Delivery
+        delivery: '',
+        // Payment
+        payment: '',
+
+        coupon_codes: [
+            {
+                id: 1,
+                active: true,
+                code: "5PLFAST",
+                percent: 0.5
+            }, {
+                id: 1,
+                active: false,
+                code: "Q95FAST",
+                percent: 0.25
+            }
+        ],
+        coupon_code_input: '',
+
         countries: [
             'Albania',
             'Andora',
@@ -83,8 +125,38 @@ var app = new Vue({
                 img: 'public/img/Przelew.png',
                 description: 'Przelew bankowy - zwykły',
             }
-        ]
+        ],
+        bsCollapse: {}
     },
-    mounted() {},
-    methods: {}
+    mounted() {
+        setTimeout(() => {
+            
+            this.prepare_additional_delivery_place();
+        }, 0);
+    },
+    methods: {
+        prepare_additional_delivery_place() {
+            var myCollapse = document.getElementById('additional-delivery')
+            this.bsCollapse = new bootstrap.Collapse(myCollapse, {
+                toggle: false
+            });
+
+            document.querySelector('#another-delivery-place')
+                .addEventListener('change', () => {
+                if (this.another_delivery_place)
+                    this.bsCollapse.show();
+                else
+                    this.bsCollapse.hide();
+            });
+        },
+
+        check_new_price() {
+            const codes = this.coupon_codes.filter(code =>
+                code.active && this.coupon_code_input == code.code
+            );
+            // Count new price
+            if (codes.length > 0)
+                this.price = this.price_native * codes[0].percent;
+        }
+    }
 });

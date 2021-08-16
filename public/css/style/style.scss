@@ -1,6 +1,10 @@
 $primary-background-color: #a89f8f;
 $primary-color: #e54444;
 
+.text-custom {
+    color: $primary-color;
+}
+
 .bg-cream {
     background: $primary-background-color;
 }

@@ -17,6 +17,60 @@
 </head>
 <body>
     <article id="App-vue" class="w-100 row m-0 justify-content-center">
+        <!-- Login modal -->
+        <div class="modal fade" id="login-modal" tabindex="-1"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content p-5">
+                    <p class="h4 text-custom">Zaloguj się do swojego konta!</p>
+                    <p class="pb-4 text-muted">Tutaj będziesz mógł zachować wszystkie swoje zakupy!</p>
+
+                    <form action="#" method="post" class="col-sm-12 mx-auto">
+                        <p class="p-1 m-0 text-muted">Email</p>
+                        <input type="text" name="username" id="username" autofocus
+                            class="form-control mx-auto mb-3">
+
+                        <p class="p-1 m-0 text-muted">Hasło</p>
+                        <input type="password" name="password" id="password"
+                            class="form-control mx-auto">
+
+                        <a class="btn w-100 px-1 mb-2 text-start text-custom"
+                            href="#">
+                            Zapomniałeś hasła ?
+                        </a>
+                        <input type="submit" id="submit" value="Zaloguj"
+                            class="btn w-100 px-5 my-1 btn-custom">
+
+                        <div class="w-100 px-1">
+                            <span class="text-muted">Nie masz konta?</span>
+                            <a href="#" class="btn text-custom px-0">Załóż</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login modal -->
+        <div class="modal fade" id="coupon-code" tabindex="-1"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content p-5">
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label text-custom h4">Kod rabatowy</label>
+                        <input type="email" class="form-control"
+                            aria-describedby="coupon_code_input" v-model="coupon_code_input">
+                        <div class="form-text">
+                            Wprowadź tutuj kod rabatowy, a otrzymasz do 50% tańcze zakupy
+                        </div>
+                    </div>
+                    <button class="btn w-100 fw-bold btn-custom" data-bs-dismiss="modal"
+                        v-on:click="check_new_price()">
+                        Zatwierdź
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- User data -->
         <section class="col-12 col-md-6 col-lg-3">
             <!-- Title -->
@@ -25,14 +79,18 @@
             </h6>
 
             <!-- Login -->
-            <button class="btn w-100 py-2 fw-bold btn-outline-custom">Logowanie</button>
+            <button class="btn w-100 py-2 fw-bold btn-outline-custom"
+                data-bs-toggle="modal" data-bs-target="#login-modal">
+                Logowanie
+            </button>
             <p class="w-100 mt-1 mb-3 text-center small">
                 Masz już konto? Kliknij żeby się zalogować.
             </p>
 
             <!-- Create new account -->
             <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" value="" id="create-new-account">
+                <input class="form-check-input" type="checkbox"
+                    id="create-new-account" v-model="create_new_account">
                 <label class="form-check-label ms-2 small" for="create-new-account">
                     Stwórz nowe konto
                 </label>
@@ -40,27 +98,27 @@
 
             <!-- User data -->
             <div class="mb-3">
-                <input type="text" class="form-control" id="exampleInputEmail1"
-                    aria-describedby="emailHelp" placeholder="Login">
+                <input type="text" class="form-control" aria-describedby="login"
+                    placeholder="Login" v-model="login">
             </div>
             <div class="mb-3">
-                <input type="password" class="form-control" id="exampleInputEmail1"
-                    aria-describedby="emailHelp" placeholder="Hasło">
+                <input type="password" class="form-control" aria-describedby="password"
+                    placeholder="Hasło" v-model="password">
             </div>
             <div class="mb-3">
-                <input type="password" class="form-control" id="exampleInputEmail1"
-                    aria-describedby="emailHelp" placeholder="Potwierdź hasło">
+                <input type="password" class="form-control" aria-describedby="repeat_password"
+                    placeholder="Potwierdź hasło" v-model="repeat_password">
             </div>
             <div class="mb-3">
-                <input type="text" class="form-control" id="exampleInputEmail1"
-                    aria-describedby="emailHelp" placeholder="Imię *">
+                <input type="text" class="form-control" aria-describedby="name"
+                    placeholder="Imię *" v-model="name">
             </div>
             <div class="mb-3">
-                <input type="text" class="form-control" id="exampleInputEmail1"
-                    aria-describedby="emailHelp" placeholder="Nazwisko *">
+                <input type="text" class="form-control" aria-describedby="surname"
+                    placeholder="Nazwisko *" v-model="surname">
             </div>
             <div class="mb-3">
-                <select class="form-select">
+                <select class="form-select" v-model="selected_country">
                     <option value="" selected disabled hidden>Państwo</option>
                     <option v-for="country in countries" v-bind:value="country">
                         {{ country }}    
@@ -68,35 +126,36 @@
                 </select>
             </div>
             <div class="mb-3">
-                <input type="text" class="form-control" id="exampleInputEmail1"
-                    aria-describedby="emailHelp" placeholder="Adres *">
+                <input type="text" class="form-control" aria-describedby="address"
+                    placeholder="Adres *" v-model="address">
             </div>
             <div class="w-100 row mx-0 mb-3">
                 <div class="col-6 ps-0">
-                    <input type="text" class="form-control" id="exampleInputEmail1"
-                        aria-describedby="emailHelp" placeholder="Kod pocztowy *">
+                    <input type="text" class="form-control" aria-describedby="postcode"
+                        placeholder="Kod pocztowy *" v-model="postcode">
                 </div>
                 <div class="col-6 px-0">
-                    <input type="text" class="form-control" id="exampleInputEmail1"
-                        aria-describedby="emailHelp" placeholder="Miasto *">
+                    <input type="text" class="form-control" aria-describedby="town"
+                        placeholder="Miasto *" v-model="town">
                 </div>
             </div>
             <div class="mb-3">
-                <input type="text" class="form-control" id="exampleInputEmail1"
-                    aria-describedby="emailHelp" placeholder="Telefon *">
+                <input type="text" class="form-control" aria-describedby="phone"
+                    placeholder="Telefon *" v-model="phone">
             </div>
 
             <!-- Place an Order for Delivery -->
             <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" value="" id="another-delivery-place">
+                <input class="form-check-input" type="checkbox" value=""
+                    id="another-delivery-place" v-model="another_delivery_place">
                 <label class="form-check-label ms-2 small" for="another-delivery-place">
                     Dostawa pod inny adres
                 </label>
             </div>
 
-            <div class="collapse show" id="collapseExample">
+            <div class="collapse" id="additional-delivery">
                 <div class="mb-3">
-                    <select class="form-select">
+                    <select class="form-select" v-model="delivery_country">
                         <option value="" selected disabled hidden>Państwo</option>
                         <option v-for="country in countries" v-bind:value="country">
                             {{ country }}    
@@ -104,17 +163,17 @@
                     </select>
                 </div>
                 <div class="mb-3">
-                    <input type="text" class="form-control" id="exampleInputEmail1"
-                        aria-describedby="emailHelp" placeholder="Adres *">
+                    <input type="text" class="form-control" aria-describedby="delivery_address"
+                        placeholder="Adres *" v-model="delivery_address">
                 </div>
                 <div class="w-100 row mx-0 mb-3">
                     <div class="col-6 ps-0">
-                        <input type="text" class="form-control" id="exampleInputEmail1"
-                            aria-describedby="emailHelp" placeholder="Kod pocztowy *">
+                        <input type="text" class="form-control" aria-describedby="delivery_postcode"
+                            placeholder="Kod pocztowy *" v-model="delivery_postcode">
                     </div>
                     <div class="col-6 px-0">
-                        <input type="text" class="form-control" id="exampleInputEmail1"
-                            aria-describedby="emailHelp" placeholder="Miasto *">
+                        <input type="text" class="form-control" aria-describedby="emailHelp"
+                            placeholder="Miasto *" v-model="delivery_town">
                     </div>
                 </div>
             </div>
@@ -122,12 +181,12 @@
 
         <!-- Payment and delivery -->
         <section class="col-12 col-md-6 col-lg-3">
-            <!-- Payment -->
+            <!-- Delivery -->
             <h6 class="p-3 mb-3 rounded text-uppercase text-white bg-cream">
                 <i class="icon-truck"></i> 2. Metoda dostawy
             </h6>
 
-            <div v-for="Delivery in Deliveries"
+            <div v-for="Delivery in Deliveries" v-model="delivery"
                 class="form-check py-2 mx-3 d-flex align-items-center">
                 <input class="form-check-input" type="radio"
                     name="flexRadioDefault" id="flexRadioDefault1">
@@ -140,12 +199,12 @@
                 </label>
             </div>
 
-            <!-- Delivery -->
+            <!-- Payment -->
             <h6 class="p-3 my-3 rounded text-uppercase text-white bg-cream">
                 <i class="icon-credit-card"></i> 3. Metoda płatności
             </h6>
 
-            <div v-for="Payment in Payments"
+            <div v-for="Payment in Payments" v-model="payment"
                 class="form-check py-2 mx-3 d-flex align-items-center">
                 <input class="form-check-input" type="radio"
                     name="flexRadioDefault" id="flexRadioDefault1">
@@ -157,7 +216,8 @@
                 </label>
             </div>
 
-            <button class="btn w-100 py-2 mt-4 fw-bold btn-outline-disabled">
+            <button class="btn w-100 py-2 mt-4 fw-bold btn-outline-disabled"
+                data-bs-toggle="modal" data-bs-target="#coupon-code">
                 Dodaj kod rabatory
             </button>
         </section>
@@ -173,7 +233,7 @@
                 <div class="w-100">
                     <div class="d-flex">
                         <b>Testowy produkt</b>
-                        <b class="ms-auto">115.00 zł</b>
+                        <b class="ms-auto">{{ price }} zł</b>
                     </div>
                     <p class="m-0">Ilość: 1</p>
                 </div>
@@ -184,11 +244,11 @@
                 <div class="w-100">
                     <div class="d-flex pb-2">
                         <span>Suma częściowa</span>
-                        <span class="ms-auto">115.00 zł</span>
+                        <span class="ms-auto">{{ price }} zł</span>
                     </div>
                     <div class="d-flex">
                         <h4 class="m-0 fw-bold">Łącznie</h4>
-                        <h4 class="my-0 ms-auto fw-bold">115.00 zł</h4>
+                        <h4 class="my-0 ms-auto fw-bold">{{ price }} zł</h4>
                     </div>
                 </div>
             </div>
