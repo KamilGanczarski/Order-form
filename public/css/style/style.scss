@@ -1,0 +1,35 @@
+$primary-background-color: #a89f8f;
+$primary-color: #e54444;
+
+.bg-cream {
+    background: $primary-background-color;
+}
+
+.btn-custom,
+.btn-outline-custom:hover {
+    border: 1px solid $primary-color;
+    color: white;
+    background: $primary-color;
+}
+
+.btn-outline-custom,
+.btn-custom:hover {
+    border: 1px solid $primary-color;
+    color: $primary-color;
+    background: transparent;
+}
+
+.btn-outline-disabled {
+    border: 1px solid #a89f8f;
+    color: #a89f8f;
+    background: transparent;
+}
+
+.btn-outline-disabled:hover {
+    color: white;
+    background: #a89f8f;
+}
+
+.border-dashed-bottom {
+    border-bottom: 1px dashed #71a5a7;
+}

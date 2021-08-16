@@ -1,0 +1,90 @@
+var app = new Vue({
+    el: '#App-vue',
+    data: {
+        asd: 1,
+        countries: [
+            'Albania',
+            'Andora',
+            'Austria',
+            'Belgia',
+            'Białoruś',
+            'Bośnia i Hercegowina',
+            'Bułgaria',
+            'Chorwacja',
+            'Cypr',
+            'Czarnogóra',
+            'Czechy',
+            'Dania',
+            'Estonia',
+            'Finlandia',
+            'Francja',
+            'Grecja',
+            'Hiszpania',
+            'Holandia',
+            'Irlandia',
+            'Islandia',
+            'Kosowo',
+            'Liechtenstein',
+            'Litwa',
+            'Luksemburg',
+            'Łotwa',
+            'Macedonia',
+            'Malta',
+            'Mołdawia',
+            'Monako',
+            'Niemcy',
+            'Norwegia',
+            'Polska',
+            'Portugalia',
+            'Rosja',
+            'Rumunia',
+            'San Marino',
+            'Serbia',
+            'Słowacja',
+            'Słowenia',
+            'Szwajcaria',
+            'Szwecja',
+            'Turcja',
+            'Ukraina',
+            'Watykan',
+            'Węgry',
+            'Wielka Brytania',
+            'Włochy'
+        ],
+        Deliveries: [
+            {
+                title: 'inpost',
+                img: 'public/img/1280px-InPost_logo.svg',
+                description: 'Paczkomaty 24/7',
+                price: '10,99 zł',
+            }, {
+                title: 'DPD',
+                img: 'public/img/DPD_logo_(2015).svg',
+                description: 'Kurier DPD',
+                price: '18,00 zł',
+            }, {
+                title: 'DPD cash on delivery',
+                img: 'public/img/DPD_logo_(2015).svg',
+                description: 'Kurier DPD pobranie',
+                price: '22,00 zł',
+            }
+        ],
+        Payments: [
+            {
+                title: 'PayU',
+                img: 'public/img/800px-PayU.svg',
+                description: 'PayU',
+            }, {
+                title: 'cash on delivery',
+                img: 'public/img/d9h0q2l-3e6cbc19-e426-4570-82ea-5ac8cb60f539.jpg',
+                description: 'Płatność przy odbiorze',
+            }, {
+                title: 'Bank transfer',
+                img: 'public/img/Przelew.png',
+                description: 'Przelew bankowy - zwykły',
+            }
+        ]
+    },
+    mounted() {},
+    methods: {}
+});
