@@ -1,8 +1,7 @@
-var app = new Vue({
+var App_vue = new Vue({
     el: '#App-vue',
     data: {
-        price_native: 115,
-        price:  115,
+        price_native:  115,
 
         // User data
         create_new_account: false,
@@ -23,11 +22,51 @@ var app = new Vue({
         delivery_address: '',
         delivery_postcode: '',
         delivery_town: '',
-        
+
         // Delivery
-        delivery: '',
+        delivery: {},
+        Deliveries: [
+            {
+                title: 'inpost',
+                img: 'public/img/1280px-InPost_logo.svg',
+                description: 'Paczkomaty 24/7',
+                price: 10.99,
+                disabled_delivery: [ false, true, false ]
+            }, {
+                title: 'DPD',
+                img: 'public/img/DPD_logo_(2015).svg',
+                description: 'Kurier DPD',
+                price: 18.00,
+                disabled_delivery: [ false, false, false ]
+            }, {
+                title: 'DPD cash on delivery',
+                img: 'public/img/DPD_logo_(2015).svg',
+                description: 'Kurier DPD pobranie',
+                price: 22.00,
+                disabled_delivery: [ true, false, true ]
+            }
+        ],
+
         // Payment
-        payment: '',
+        payment: {},
+        Payments: [
+            {
+                title: 'PayU',
+                img: 'public/img/800px-PayU.svg',
+                description: 'PayU',
+                disabled: false
+            }, {
+                title: 'cash on delivery',
+                img: 'public/img/d9h0q2l-3e6cbc19-e426-4570-82ea-5ac8cb60f539.jpg',
+                description: 'Płatność przy odbiorze',
+                disabled: false
+            }, {
+                title: 'Bank transfer',
+                img: 'public/img/Przelew.png',
+                description: 'Przelew bankowy - zwykły',
+                disabled: false
+            }
+        ],
 
         coupon_codes: [
             {
@@ -93,50 +132,22 @@ var app = new Vue({
             'Wielka Brytania',
             'Włochy'
         ],
-        Deliveries: [
-            {
-                title: 'inpost',
-                img: 'public/img/1280px-InPost_logo.svg',
-                description: 'Paczkomaty 24/7',
-                price: '10,99 zł',
-            }, {
-                title: 'DPD',
-                img: 'public/img/DPD_logo_(2015).svg',
-                description: 'Kurier DPD',
-                price: '18,00 zł',
-            }, {
-                title: 'DPD cash on delivery',
-                img: 'public/img/DPD_logo_(2015).svg',
-                description: 'Kurier DPD pobranie',
-                price: '22,00 zł',
-            }
-        ],
-        Payments: [
-            {
-                title: 'PayU',
-                img: 'public/img/800px-PayU.svg',
-                description: 'PayU',
-            }, {
-                title: 'cash on delivery',
-                img: 'public/img/d9h0q2l-3e6cbc19-e426-4570-82ea-5ac8cb60f539.jpg',
-                description: 'Płatność przy odbiorze',
-            }, {
-                title: 'Bank transfer',
-                img: 'public/img/Przelew.png',
-                description: 'Przelew bankowy - zwykły',
-            }
-        ],
-        bsCollapse: {}
+
+        bsCollapse: {},
+        coupon_modal: {},
+        active_coupons: {},
+        coupon_error: ''
     },
     mounted() {
+        // Load function after render all website
         setTimeout(() => {
-            
             this.prepare_additional_delivery_place();
+            this.prepare_bootstrap_modal();
         }, 0);
     },
     methods: {
         prepare_additional_delivery_place() {
-            var myCollapse = document.getElementById('additional-delivery')
+            const myCollapse = document.getElementById('additional-delivery')
             this.bsCollapse = new bootstrap.Collapse(myCollapse, {
                 toggle: false
             });
@@ -150,13 +161,49 @@ var app = new Vue({
             });
         },
 
-        check_new_price() {
+        prepare_bootstrap_modal() {
+            this.coupon_modal = new bootstrap.Modal(document.querySelector('#coupon-modal'), {
+                keyboard: false
+            });
+        },
+
+        add_coupon_code() {
+            this.coupon_error = '';
             const codes = this.coupon_codes.filter(code =>
                 code.active && this.coupon_code_input == code.code
             );
+
             // Count new price
-            if (codes.length > 0)
-                this.price = this.price_native * codes[0].percent;
+            if (codes.length > 0) {
+                this.active_coupons = codes;
+                this.coupon_modal.hide();
+            } else {
+                this.coupon_error = 'Nieprawidłowy, albo nieaktywny kupon';
+            }
+        },
+
+        sort_payment(Delivery) {
+            this.Payments.forEach((Payment, i) => {
+                Payment.disabled = Delivery.disabled_delivery[i];
+            });
+        },
+
+        show_price() {
+            let price = this.price_native;
+            // Add coupon to price
+            if (this.active_coupons.length > 0)
+                price *= this.active_coupons[0].percent;
+
+            // Add delivery price
+            if (Object.keys(this.delivery).length > 0)
+                price += this.delivery.price;
+
+            return this.custom_price(price);
+        },
+
+        custom_price(price) {
+            if (typeof price == "undefined") return '';
+            return price + [(price == Math.floor(price)) ? `.00 zł` : ` zł`];
         }
     }
 });

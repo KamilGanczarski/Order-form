@@ -16,14 +16,14 @@
     <link rel="stylesheet" href="public/css/style.min.css">
 </head>
 <body>
-    <article id="App-vue" class="w-100 row m-0 justify-content-center">
+    <article id="App-vue" class="w-100 row py-5 m-0 justify-content-center">
         <!-- Login modal -->
         <div class="modal fade" id="login-modal" tabindex="-1"
             aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content p-5">
                     <p class="h4 text-custom">Zaloguj się do swojego konta!</p>
-                    <p class="pb-4 text-muted">Tutaj będziesz mógł zachować wszystkie swoje zakupy!</p>
+                    <p class="pb-4 m-0 text-muted">Tutaj będziesz mógł zachować wszystkie swoje zakupy!</p>
 
                     <form action="#" method="post" class="col-sm-12 mx-auto">
                         <p class="p-1 m-0 text-muted">Email</p>
@@ -36,7 +36,7 @@
 
                         <a class="btn w-100 px-1 mb-2 text-start text-custom"
                             href="#">
-                            Zapomniałeś hasła ?
+                            Zapomniałeś hasła?
                         </a>
                         <input type="submit" id="submit" value="Zaloguj"
                             class="btn w-100 px-5 my-1 btn-custom">
@@ -51,22 +51,26 @@
         </div>
 
         <!-- Login modal -->
-        <div class="modal fade" id="coupon-code" tabindex="-1"
+        <div class="modal fade" id="coupon-modal" tabindex="-1"
             aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="modal-content p-5">
-                    <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label text-custom h4">Kod rabatowy</label>
+                <div class="modal-content">
+                    <div class="modal-header border-0">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body px-5 pb-2 mb-3">
+                        <label for="exampleInputEmail1" class="form-label text-custom h3">Kod rabatowy</label>
                         <input type="email" class="form-control"
                             aria-describedby="coupon_code_input" v-model="coupon_code_input">
-                        <div class="form-text">
+                        <p class="form-text pb-2">
                             Wprowadź tutuj kod rabatowy, a otrzymasz do 50% tańcze zakupy
-                        </div>
+                        </p>
+                        <button class="btn w-100 fw-bold btn-custom"
+                            v-on:click="add_coupon_code()">
+                            Zatwierdź
+                        </button>
+                        <p class="pt-3 text-danger small">{{coupon_error}}</p>
                     </div>
-                    <button class="btn w-100 fw-bold btn-custom" data-bs-dismiss="modal"
-                        v-on:click="check_new_price()">
-                        Zatwierdź
-                    </button>
                 </div>
             </div>
         </div>
@@ -186,16 +190,18 @@
                 <i class="icon-truck"></i> 2. Metoda dostawy
             </h6>
 
-            <div v-for="Delivery in Deliveries" v-model="delivery"
-                class="form-check py-2 mx-3 d-flex align-items-center">
-                <input class="form-check-input" type="radio"
-                    name="flexRadioDefault" id="flexRadioDefault1">
+            <div v-for="(Delivery, i) in Deliveries"
+                class="form-check py-2 mx-3 d-flex align-items-center"
+                v-on:click="sort_payment(Delivery)">
+                <input class="form-check-input" type="radio" v-model="delivery"
+                    v-bind:value="Delivery" name="delivery-radio"
+                    v-bind:id="'delivery-radio' + i">
                 <label class="form-check-label w-100 d-flex align-items-center small"
-                    for="flexRadioDefault1">
+                    v-bind:for="'delivery-radio' + i">
                     <img v-bind:src="Delivery.img"
                         alt="inpost-logo" width="60px" class="mx-2">
                     <div class="px-1">{{ Delivery.description }}</div>
-                    <b class="ms-auto">{{ Delivery.price }}</b>
+                    <b class="ms-auto">{{ custom_price(Delivery.price) }}</b>
                 </label>
             </div>
 
@@ -204,12 +210,13 @@
                 <i class="icon-credit-card"></i> 3. Metoda płatności
             </h6>
 
-            <div v-for="Payment in Payments" v-model="payment"
+            <div v-for="(Payment, i) in Payments" v-model="payment"
                 class="form-check py-2 mx-3 d-flex align-items-center">
-                <input class="form-check-input" type="radio"
-                    name="flexRadioDefault" id="flexRadioDefault1">
+                <input class="form-check-input" type="radio" id="radio-payment"
+                    v-bind:value="Payment" name="payment-radio"
+                    v-bind:id="'payment-radio' + i" v-bind:disabled="Payment.disabled">
                 <label class="form-check-label w-100 d-flex align-items-center small"
-                    for="flexRadioDefault1">
+                    v-bind:for="'payment-radio' + i">
                     <img v-bind:src="Payment.img"
                         alt="inpost-logo" width="50px" class="mx-2">
                     <div class="px-1">{{ Payment.description }}</div>
@@ -217,7 +224,7 @@
             </div>
 
             <button class="btn w-100 py-2 mt-4 fw-bold btn-outline-disabled"
-                data-bs-toggle="modal" data-bs-target="#coupon-code">
+                data-bs-toggle="modal" data-bs-target="#coupon-modal">
                 Dodaj kod rabatory
             </button>
         </section>
@@ -233,22 +240,29 @@
                 <div class="w-100">
                     <div class="d-flex">
                         <b>Testowy produkt</b>
-                        <b class="ms-auto">{{ price }} zł</b>
+                        <b class="ms-auto">{{ custom_price(price_native) }}</b>
                     </div>
                     <p class="m-0">Ilość: 1</p>
                 </div>
             </div>
 
-
             <div class="d-flex align-items-center py-3 border-dashed-bottom">
                 <div class="w-100">
                     <div class="d-flex pb-2">
-                        <span>Suma częściowa</span>
-                        <span class="ms-auto">{{ price }} zł</span>
+                        <span class="me-auto">Suma częściowa</span>
+                        <span>
+                            {{ custom_price(price_native) }}
+                        </span>
+                        <span v-if="active_coupons.length > 0">
+                            &nbsp;-&nbsp;{{ custom_price(active_coupons[0].percent*price_native) }}
+                        </span>
+                        <span v-if="typeof delivery.price != 'undefined'">
+                            &nbsp;+&nbsp;{{ custom_price(delivery.price) }}
+                        </span>
                     </div>
                     <div class="d-flex">
                         <h4 class="m-0 fw-bold">Łącznie</h4>
-                        <h4 class="my-0 ms-auto fw-bold">{{ price }} zł</h4>
+                        <h4 class="my-0 ms-auto fw-bold">{{ show_price() }}</h4>
                     </div>
                 </div>
             </div>
