@@ -3,7 +3,7 @@ var App_vue = new Vue({
     data: {
         price_native:  115,
 
-        // User data
+        // User data inputs
         create_new_account: false,
         login: '',
         password: '',
@@ -68,77 +68,21 @@ var App_vue = new Vue({
             }
         ],
 
-        coupon_codes: [
-            {
-                id: 1,
-                active: true,
-                code: "5PLFAST",
-                percent: 0.5
-            }, {
-                id: 1,
-                active: false,
-                code: "Q95FAST",
-                percent: 0.25
-            }
-        ],
+        // Counpon codes
+        coupon_codes: [],
         coupon_code_input: '',
-
-        countries: [
-            'Albania',
-            'Andora',
-            'Austria',
-            'Belgia',
-            'Białoruś',
-            'Bośnia i Hercegowina',
-            'Bułgaria',
-            'Chorwacja',
-            'Cypr',
-            'Czarnogóra',
-            'Czechy',
-            'Dania',
-            'Estonia',
-            'Finlandia',
-            'Francja',
-            'Grecja',
-            'Hiszpania',
-            'Holandia',
-            'Irlandia',
-            'Islandia',
-            'Kosowo',
-            'Liechtenstein',
-            'Litwa',
-            'Luksemburg',
-            'Łotwa',
-            'Macedonia',
-            'Malta',
-            'Mołdawia',
-            'Monako',
-            'Niemcy',
-            'Norwegia',
-            'Polska',
-            'Portugalia',
-            'Rosja',
-            'Rumunia',
-            'San Marino',
-            'Serbia',
-            'Słowacja',
-            'Słowenia',
-            'Szwajcaria',
-            'Szwecja',
-            'Turcja',
-            'Ukraina',
-            'Watykan',
-            'Węgry',
-            'Wielka Brytania',
-            'Włochy'
-        ],
-
-        bsCollapse: {},
-        coupon_modal: {},
         active_coupons: {},
-        coupon_error: ''
+        coupon_error: '',
+
+        // Countries
+        countries: [],
+
+        delivery_collapse: {},
+        coupon_modal: {}
+        
     },
     mounted() {
+        this.fetch_order();
         // Load function after render all website
         setTimeout(() => {
             this.prepare_additional_delivery_place();
@@ -146,34 +90,66 @@ var App_vue = new Vue({
         }, 0);
     },
     methods: {
+        axios_fetch(url, callback) {
+			axios.get(url)
+				.then(response => (
+					callback(response.data)
+					// console.log(url, response.data)
+				))
+				.catch(error => {
+					callback(error)
+				});
+		},
+
+		axios_post(url, callback) {
+			axios.post(url)
+				.then(response => {
+					callback(response.data)
+				})
+				.catch(error => {
+					callback(error)
+				});
+		},
+
+        fetch_order() {
+            let query = "http://localhost/all/order-form.pl/Order-form/app/api/Fetch.php?t=set-order";
+            this.axios_fetch(query, (response) => {
+                if (response.status === 400) {
+                    this.countries = response.countries;
+                    this.coupon_codes = response.coupon_codes;
+                }
+            });
+        },
+
         prepare_additional_delivery_place() {
             const myCollapse = document.getElementById('additional-delivery')
-            this.bsCollapse = new bootstrap.Collapse(myCollapse, {
+            this.delivery_collapse = new bootstrap.Collapse(myCollapse, {
                 toggle: false
             });
 
             document.querySelector('#another-delivery-place')
                 .addEventListener('change', () => {
                 if (this.another_delivery_place)
-                    this.bsCollapse.show();
+                    this.delivery_collapse.show();
                 else
-                    this.bsCollapse.hide();
+                    this.delivery_collapse.hide();
             });
         },
 
         prepare_bootstrap_modal() {
-            this.coupon_modal = new bootstrap.Modal(document.querySelector('#coupon-modal'), {
+            this.coupon_modal = new bootstrap.Modal(
+                document.querySelector('#coupon-modal'), {
                 keyboard: false
             });
         },
 
         add_coupon_code() {
             this.coupon_error = '';
+            // Search active and the same coupon code
             const codes = this.coupon_codes.filter(code =>
                 code.active && this.coupon_code_input == code.code
             );
 
-            // Count new price
             if (codes.length > 0) {
                 this.active_coupons = codes;
                 this.coupon_modal.hide();
@@ -182,6 +158,7 @@ var App_vue = new Vue({
             }
         },
 
+        // Rewite from disabled_delivery array to Payments disable or active it
         sort_payment(Delivery) {
             this.Payments.forEach((Payment, i) => {
                 Payment.disabled = Delivery.disabled_delivery[i];
@@ -202,8 +179,14 @@ var App_vue = new Vue({
         },
 
         custom_price(price) {
+            // If price is undefined
             if (typeof price == "undefined") return '';
+            // Else
             return price + [(price == Math.floor(price)) ? `.00 zł` : ` zł`];
-        }
+        },
+
+        check_data() {
+
+        },
     }
 });

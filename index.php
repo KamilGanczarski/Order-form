@@ -2,6 +2,8 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order form</title>
 
     <!-- Vue.js -->
@@ -124,8 +126,9 @@
             <div class="mb-3">
                 <select class="form-select" v-model="selected_country">
                     <option value="" selected disabled hidden>Państwo</option>
-                    <option v-for="country in countries" v-bind:value="country">
-                        {{ country }}    
+                    <option v-for="country in countries"
+                        v-bind:value="country.country">
+                        {{ country.country }}    
                     </option>
                 </select>
             </div>
@@ -161,8 +164,9 @@
                 <div class="mb-3">
                     <select class="form-select" v-model="delivery_country">
                         <option value="" selected disabled hidden>Państwo</option>
-                        <option v-for="country in countries" v-bind:value="country">
-                            {{ country }}    
+                        <option v-for="country in countries"
+                            v-bind:value="country.country">
+                            {{ country.country }}    
                         </option>
                     </select>
                 </div>
@@ -230,7 +234,7 @@
         </section>
 
         <!-- Summary -->
-        <section class="col-12 col-md-6 col-lg-3 px-0 mb-5">
+        <section class="col-12 col-md-6 col-lg-3 mb-5">
             <h6 class="p-3 mb-3 rounded text-uppercase text-white bg-cream">
                 <i class="icon-doc-text"></i> 4. Podsumowanie
             </h6>
