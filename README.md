@@ -27,7 +27,15 @@ app_url: 'http://localhost/all/order-form.pl/Order-form/app/api/'
 ```
 
 ## Correct coupon codes:
+First coupon
 ```
-5PLFAST active 50%
-Q95FAST inactive 25%
+Code: 5PLFAST 
+Active: active 
+Discount: 50%
+```
+Second coupon
+```
+Code: Q95FAST 
+Active: inactive 
+Discount: 25%
 ```
