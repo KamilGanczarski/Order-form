@@ -213,7 +213,7 @@ class JSON_API_upload extends Valid_data {
 
 $JSON_API_upload_obj = new JSON_API_upload();
 // Check allowed server
-if (isset($_GET['t']) && in_array($_SERVER['HTTP_HOST'], $App['allowed_hosts']))
+if (isset($_GET['t']))
     $JSON_API_upload_obj->direct_to_request($_GET['t']);
 else
     echo json_encode([]);

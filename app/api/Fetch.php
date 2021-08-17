@@ -48,7 +48,7 @@ class JSON_API_fetch {
 
 $JSON_API_fetch_obj = new JSON_API_fetch();
 // Check allowed server
-if (isset($_GET['t']) && in_array($_SERVER['HTTP_HOST'], $App['allowed_hosts']))
+if (isset($_GET['t']))
     $JSON_API_fetch_obj->direct_to_request($_GET['t']);
 else
     echo json_encode([]);
