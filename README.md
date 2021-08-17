@@ -1,5 +1,5 @@
 # Order-form
-Order-form
+configuration
 
 ## Database file sql to build
 ```
@@ -13,8 +13,16 @@ app_url: 'http://localhost/all/order-form.pl/Order-form/app/api/',<br />
 ```
 
 ## File configuration to connect mysql
+File directory
 ```
 /config/database.php
+```
+
+Parameters to configure mysql connection
+```
+'database' => env('DB_DATABASE', 'your-database-name'),
+'username' => env('DB_USERNAME', 'your-database-username'),
+'password' => env('DB_PASSWORD', 'your-database-password'),
 ```
 
 ## Correct coupon codes:
