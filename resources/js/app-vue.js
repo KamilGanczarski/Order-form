@@ -2,6 +2,7 @@ var App_vue = new Vue({
     el: '#App-vue',
     data: {
         message: [],
+        message_success: [],
         price_native:  115,
 
         // User data inputs
@@ -132,6 +133,22 @@ var App_vue = new Vue({
 				document.querySelector('#notification-window').classList.remove('show');
 		},
 
+		show_message_success(messages) {
+			this.message_success = [];
+			messages.forEach(message => {
+				message.style = "m-0 text-" + message.style;
+				this.message_success.push({
+					text: message.message,
+					style: "m-0 text-muted"
+				});
+			});
+
+			if (this.message_success.length > 0)
+                this.order_success_modal.show();
+			else
+                this.order_success_modal.hide();
+		},
+
         fetch_order() {
             let query = "http://localhost/all/order-form.pl/Order-form/app/api/Fetch.php?t=set-order";
             this.axios_fetch(query, (response) => {
@@ -211,16 +228,138 @@ var App_vue = new Vue({
             return price + [(price == Math.floor(price)) ? `.00 zł` : ` zł`];
         },
 
-        set_order() {
-            this.show_message([]);
+        valid_form() {
+            let res = {};
             if (!this.restriction) {
                 this.show_message([{
                     message: 'Proszę zaakceptować regulamin zakupów',
                     style: 'danger'
                 }]);
-                return;
+                return false;
+            }
+
+            // Check name
+            res = Valid_data.check_name(this.name);
+            if (res.style == 'danger') {
+                this.show_message([res]);
+                return false;
+            }
+
+            // Check surname
+            res = Valid_data.check_surname(this.surname);
+            if (res.style == 'danger') {
+                this.show_message([res]);
+                return false;
+            }
+
+            // If create client account
+            if (this.create_new_account) {
+                // Check check login
+                res = Valid_data.check_login(this.login);
+                if (res.style == 'danger') {
+                    this.show_message([res]);
+                    return false;
+                }
+
+                // Check check password
+                res = Valid_data.check_password(this.password, this.repeat_password);
+                if (res.style == 'danger') {
+                    this.show_message([res]);
+                    return false;
+                }
+            }
+
+            // Check country
+            res = Valid_data.check_country(this.selected_country);
+            if (res.style == 'danger') {
+                this.show_message([res]);
+                return false;
+            }
+
+            // Check address
+            res = Valid_data.check_address(this.address);
+            if (res.style == 'danger') {
+                this.show_message([res]);
+                return false;
+            }
+
+            // Check postcode
+            res = Valid_data.check_postcode(this.postcode);
+            if (res.style == 'danger') {
+                this.show_message([res]);
+                return false;
+            }
+
+            // Check town
+            res = Valid_data.check_town(this.town);
+            if (res.style == 'danger') {
+                this.show_message([res]);
+                return false;
+            }
+
+            // Check phone
+            res = Valid_data.check_phone(this.phone);
+            if (res.style == 'danger') {
+                this.show_message([res]);
+                return false;
+            }
+
+            if (this.another_delivery_place) {
+                // Check delivery country
+                res = Valid_data.check_country(this.delivery_country);
+                if (res.style == 'danger') {
+                    this.show_message([res]);
+                    return false;
+                }
+
+                // Check delivery address
+                res = Valid_data.check_address(this.delivery_address);
+                if (res.style == 'danger') {
+                    this.show_message([res]);
+                    return false;
+                }
+
+                // Check delivery postcode
+                res = Valid_data.check_postcode(this.delivery_postcode);
+                if (res.style == 'danger') {
+                    this.show_message([res]);
+                    return false;
+                }
+
+                // Check delivery town
+                res = Valid_data.check_town(this.delivery_town);
+                if (res.style == 'danger') {
+                    this.show_message([res]);
+                    return false;
+                }
+            }
+
+            // Check delivery method
+            res = Valid_data.check_delivery_method(this.delivery.description);
+            if (res.style == 'danger') {
+                this.show_message([res]);
+                return false;
+            }
+
+            // Check payment method
+            res = Valid_data.check_payment_method(this.payment.description);
+            if (res.style == 'danger') {
+                this.show_message([res]);
+                return false;
             }
             
+            // Send request to database
+            this.send_order_to_api();
+            return true;
+        },
+
+        set_order() {
+            this.show_message([]);
+            this.show_message_success([]);
+            this.valid_form();
+        },
+
+        send_order_to_api() {
             let query = `http://localhost/all/order-form.pl/Order-form/app/api/Upload.php` +
                 `?t=set-order` +
                 `&Order={` +
@@ -252,10 +391,10 @@ var App_vue = new Vue({
             this.axios_post(query, (response) => {
 console.log(response);
                 if (response.length > 0 && response[0].style == 'success')
-                    this.order_success_modal.show();
+                    this.show_message_success(response);
                 else
                     this.show_message(response);
             });
-        },
+        }
     }
 });

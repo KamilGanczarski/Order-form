@@ -88,6 +88,7 @@ class JSON_API_upload extends Valid_data {
             $this->valid = false;
             $this->add_response("Zamówienie nie zostało dodane", "danger");
         }
+        return $order_number;
     }
 
     private function valid_order($Order) {
@@ -152,12 +153,12 @@ class JSON_API_upload extends Valid_data {
         $this->price += $this->delivery_price;
 
         // Add new order
-        $this->add_new_order($Order, $user_id);
+        $order_number = $this->add_new_order($Order, $user_id);
 
         if (!$this->valid || $user_id == 0)
             $this->delete_all_changes($user_id);
         else
-            $this->add_response("Zamówienie zostało złożone", "success");
+            $this->add_response("Zamówienie nr: $order_number zostało przyjęte.", "success");
 
         echo json_encode($this->res);
     }

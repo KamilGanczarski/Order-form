@@ -48,7 +48,7 @@ class Valid_data {
     protected function check_country($text) {
         if ($this->valid && strlen($text) < 4 || strlen($text) > 255) {
             $this->valid = false;
-            $this->add_response("Nieprawidłowe państwo (państwo powinno mieć od 6 od 255 znaków)", "danger");
+            $this->add_response("Nieprawidłowe państwo (państwo powinno mieć od 4 od 255 znaków)", "danger");
         }
     }
 
@@ -60,9 +60,9 @@ class Valid_data {
     }
 
     protected function check_postcode($text) {
-        if ($this->valid && strlen($text) < 1 || strlen($text) > 255) {
+        if ($this->valid && strlen($text) < 2 || strlen($text) > 255) {
             $this->valid = false;
-            $this->add_response("Nieprawidłowy kod pocztowy (kod pocztowy powinien mieć od 1 od 255 znaków)", "danger");
+            $this->add_response("Nieprawidłowy kod pocztowy (kod pocztowy powinien mieć od 2 od 255 znaków)", "danger");
         }
     }
 

@@ -87,13 +87,11 @@
                     <div class="modal-header border-0">
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body px-5 pb-2 mb-3">
-                        <label for="exampleInputEmail1" class="form-label text-custom h3">
-                            Twoje zamówienie
-                        </label>
-                        <input type="email" class="form-control"
-                            aria-describedby="coupon_code_input" v-model="coupon_code_input">
-                        <p v-for="mess in message" v-html="mess.text"
+                    <div class="modal-body px-5 pb-5">
+                        <h3 class="text-custom pb-2">
+                            Twoje zamówienie zostało przyjęte do realicacji, dziękujemy za zakupy!
+                        </h3>
+                        <p v-for="mess in message_success" v-html="mess.text"
                             v-bind:class="mess.style"></p>
                     </div>
                 </div>
@@ -334,6 +332,7 @@
         </section>
     </article>
 
+    <script src="resources/js/Valid-data.js"></script>
     <script src="resources/js/app-vue.js"></script>
 
     <!-- Popper.js -->
