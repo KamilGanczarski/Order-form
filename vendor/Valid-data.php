@@ -77,6 +77,9 @@ class Valid_data {
         if ($this->valid && strlen($text) < 9 || strlen($text) > 255) {
             $this->valid = false;
             $this->add_response("Nieprawidłowy numer telefonu (numer telefonu powinien mieć od 9 od 255 znaków)", "danger");
+        } else if ($this->valid && !is_numeric(preg_replace('/\s+/', '', $text))) {
+            $this->valid = false;
+            $this->add_response("Nieprawidłowy numer telefonu (numer telefonu powinien zawierać tylko cyfry)", "danger");
         }
     }
 

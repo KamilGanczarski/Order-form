@@ -35,8 +35,8 @@ CREATE TABLE User (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 LOCK TABLES User WRITE;
-INSERT INTO User VALUES
-    (1, 'developer', '$2y$10$xbYWmiExwvDuiLcST3hbIe2JiFwmhS4f9htqCJYjjKf38EhrUGzv6', 'Kamil', 'Nowak');
+-- INSERT INTO User VALUES
+--     (1, 'developer', '$2y$10$xbYWmiExwvDuiLcST3hbIe2JiFwmhS4f9htqCJYjjKf38EhrUGzv6', 'Kamil', 'Nowak');
 
 UNLOCK TABLES;
 
@@ -56,8 +56,8 @@ CREATE TABLE Address (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 LOCK TABLES Address WRITE;
-INSERT INTO Address VALUES
-    (1, 1, 'Polska', 'Opole', '45-003', 'Opole', '512 123 938');
+-- INSERT INTO Address VALUES
+--     (1, 1, 'Polska', 'Opole', '45-003', 'Opole', '512 123 938');
 
 UNLOCK TABLES;
 
@@ -77,8 +77,8 @@ CREATE TABLE Order_info (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 LOCK TABLES Order_info WRITE;
-INSERT INTO Order_info VALUES
-    (1, 1, 'asd7a8s7d9byp2ebbaps9dypq', 115.00, 'inpost', 'Bank transfer', '');
+-- INSERT INTO Order_info VALUES
+--     (1, 1, 'asd7a8s7d9byp2ebbaps9dypq', 115.00, 'inpost', 'Bank transfer', '');
 
 UNLOCK TABLES;
 

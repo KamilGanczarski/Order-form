@@ -30,19 +30,19 @@ var App_vue = new Vue({
         Deliveries: [
             {
                 title: 'inpost',
-                img: 'public/img/1280px-InPost_logo.svg',
+                img: 'public/img/InPost_logotype_2019_white.png',
                 description: 'Paczkomaty 24/7',
                 price: 10.99,
                 disabled_delivery: [ false, true, false ]
             }, {
                 title: 'DPD',
-                img: 'public/img/DPD_logo_(2015).svg',
+                img: 'public/img/logo-dpd-kurier.jpg',
                 description: 'Kurier DPD',
                 price: 18.00,
                 disabled_delivery: [ false, false, false ]
             }, {
                 title: 'DPD cash on delivery',
-                img: 'public/img/DPD_logo_(2015).svg',
+                img: 'public/img/logo-dpd-kurier.jpg',
                 description: 'Kurier DPD pobranie',
                 price: 22.00,
                 disabled_delivery: [ true, false, true ]
@@ -54,7 +54,7 @@ var App_vue = new Vue({
         Payments: [
             {
                 title: 'PayU',
-                img: 'public/img/800px-PayU.svg',
+                img: 'public/img/PAYU_LOGO_LIME-e1588155626956.jpg',
                 description: 'PayU',
                 disabled: false
             }, {
@@ -86,6 +86,7 @@ var App_vue = new Vue({
 
         newsletter: false,
         restriction: false,
+        g_rechaptcha_response: ''
     },
     mounted() {
         this.fetch_order();
@@ -349,7 +350,9 @@ var App_vue = new Vue({
             }
             
             // Send request to database
-            this.send_order_to_api();
+            // this.send_order_to_api();
+
+            document.querySelector('.g-recaptcha').click();
             return true;
         },
 
@@ -359,7 +362,7 @@ var App_vue = new Vue({
             this.valid_form();
         },
 
-        send_order_to_api() {
+        send_order_to_api(token) {
             let query = `http://localhost/all/order-form.pl/Order-form/app/api/Upload.php` +
                 `?t=set-order` +
                 `&Order={` +
@@ -385,11 +388,11 @@ var App_vue = new Vue({
                     `"payment_method":"${this.payment.description}",` +
                     `"actives_coupons":"${this.actives_coupons.length > 0 ? this.actives_coupons[0].code : ''}",` +
                     `"comment":"${this.comment}",` +
-                    `"newsletter":"${this.newsletter}"` +
+                    `"newsletter":"${this.newsletter}",` +
+                    `"g_rechaptcha_response":"${token}"` +
                 `}`;
 
             this.axios_post(query, (response) => {
-console.log(response);
                 if (response.length > 0 && response[0].style == 'success')
                     this.show_message_success(response);
                 else

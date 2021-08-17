@@ -1,3 +1,7 @@
+<?php
+	define('SITE_KEY', '6Ld7VJcbAAAAABE8xz3oz8ClO-zdYOQQKk5QcOme');
+	define('SECRET_KEY', '6Ld7VJcbAAAAANqAB5JF3ioJu5EM4vutJEonFMdv');
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,6 +20,7 @@
 
     <!-- Style -->
     <link rel="stylesheet" href="public/css/style.min.css">
+	<script src="https://www.google.com/recaptcha/api.js?render=<?=SITE_KEY?>" async defer></script>
 </head>
 <body>
     <article id="App-vue" class="w-100 row py-5 m-0 justify-content-center">
@@ -224,7 +229,7 @@
                 <label class="form-check-label w-100 d-flex align-items-center small"
                     v-bind:for="'delivery-radio' + i">
                     <img v-bind:src="Delivery.img"
-                        alt="inpost-logo" width="60px" class="mx-2">
+                        v-bind:alt="Delivery.description" width="60px" class="mx-2">
                     <div class="px-1">{{ Delivery.description }}</div>
                     <b class="ms-auto">{{ custom_price(Delivery.price) }}</b>
                 </label>
@@ -242,7 +247,7 @@
                     v-bind:id="'payment-radio' + i" v-bind:disabled="Payment.disabled">
                 <label class="form-check-label w-100 d-flex align-items-center small"
                     v-bind:for="'payment-radio' + i">
-                    <img v-bind:src="Payment.img"
+                    <img v-bind:src="Payment.img" v-bind:alt="Payment.description"
                         alt="inpost-logo" width="50px" class="mx-2">
                     <div class="px-1">{{ Payment.description }}</div>
                 </label>
@@ -316,7 +321,7 @@
             </div>
 
             <!-- Login -->
-            <button class="btn w-100 py-3 fw-bold btn-custom" v-on:click="set_order()">
+            <button class="btn w-100 py-3 fw-bold btn-custom" v-on:click="set_order">
                 Potwierdź zakupy
             </button>
         </section>
@@ -330,8 +335,18 @@
                     v-bind:class="mess.style"></p>
             </div>
         </section>
+
+        <input type="hidden" class="g-rechaptcha-response" name="g-rechaptcha-response">
+        <button class="g-recaptcha d-none" data-sitekey="<?=SITE_KEY?>"
+            data-callback='on_submit_recaptcha'></button>
     </article>
 
+    <script>
+    function on_submit_recaptcha(token) {
+        document.querySelector('.g-rechaptcha-response').value = token;
+        App_vue.send_order_to_api(token);
+    }
+    </script>
     <script src="resources/js/Valid-data.js"></script>
     <script src="resources/js/app-vue.js"></script>
 

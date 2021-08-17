@@ -7,6 +7,10 @@ header("Content-type: application/json; charset=utf-8");
 require '../../vendor/Database/PDO-Mysql.php';
 require '../../vendor/Valid-data.php';
 
+// Token
+define('SITE_KEY', '6Ld7VJcbAAAAABE8xz3oz8ClO-zdYOQQKk5QcOme');
+define('SECRET_KEY', '6Ld7VJcbAAAAANqAB5JF3ioJu5EM4vutJEonFMdv');
+
 class JSON_API_upload extends Valid_data {
     protected
         $valid = true,
@@ -14,6 +18,12 @@ class JSON_API_upload extends Valid_data {
         $price = 115,
         $coupon_code = 0,
         $delivery_price = 0;
+
+    private function get_recaptcha($secret_key) {
+        $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" .
+            SECRET_KEY . "&response={$secret_key}");
+        return json_decode($response);
+    }
 
     private function create_account($Order) {
         // Quote string with slashes
@@ -137,28 +147,34 @@ class JSON_API_upload extends Valid_data {
 
     private function set_order($Order) {
         $Order = json_decode($Order);
-        // Check all data
-        $this->valid_order($Order);
-        // Add new user
-        $user_id = $this->create_account($Order);
-        // Add new address
-        $this->add_new_address($Order, $user_id);
-
-        // Calc final price
-        
-        // Add coupon code to price
-        $this->price -= $this->price * $this->coupon_code;
-
-        // Add delivery price to final price
-        $this->price += $this->delivery_price;
-
-        // Add new order
-        $order_number = $this->add_new_order($Order, $user_id);
-
-        if (!$this->valid || $user_id == 0)
-            $this->delete_all_changes($user_id);
-        else
-            $this->add_response("Zamówienie nr: $order_number zostało przyjęte.", "success");
+        $response = $this->get_recaptcha($Order->g_rechaptcha_response);
+        if ($response->success) {
+            // Check all data
+            $this->valid_order($Order);
+            // Add new user
+            $user_id = $this->create_account($Order);
+            // Add new address
+            $this->add_new_address($Order, $user_id);
+    
+            // Calc final price
+            
+            // Add coupon code to price
+            $this->price -= $this->price * $this->coupon_code;
+    
+            // Add delivery price to final price
+            $this->price += $this->delivery_price;
+    
+            // Add new order
+            $order_number = $this->add_new_order($Order, $user_id);
+    
+            if (!$this->valid || $user_id == 0)
+                $this->delete_all_changes($user_id);
+            else
+                $this->add_response("Zamówienie nr: $order_number zostało przyjęte.", "success");
+        } else {
+            $this->valid = false;
+            $this->add_response("Zamówienie nie zostało dodane", "success");
+        }
 
         echo json_encode($this->res);
     }
