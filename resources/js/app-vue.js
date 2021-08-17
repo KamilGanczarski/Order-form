@@ -1,6 +1,7 @@
 var App_vue = new Vue({
     el: '#App-vue',
     data: {
+        app_url: 'http://localhost/all/order-form.pl/Order-form/app/api/',
         message: [],
         message_success: [],
         price_native:  115,
@@ -151,7 +152,7 @@ var App_vue = new Vue({
 		},
 
         fetch_order() {
-            let query = "http://localhost/all/order-form.pl/Order-form/app/api/Fetch.php?t=set-order";
+            let query = `${this.app_url}Fetch.php?t=set-order`;
             this.axios_fetch(query, (response) => {
                 if (response.status === 400) {
                     this.countries = response.countries;
@@ -363,7 +364,7 @@ var App_vue = new Vue({
         },
 
         send_order_to_api(token) {
-            let query = `http://localhost/all/order-form.pl/Order-form/app/api/Upload.php` +
+            let query = `${this.app_url}Upload.php` +
                 `?t=set-order` +
                 `&Order={` +
                     `"create_new_account":${this.create_new_account},` +
