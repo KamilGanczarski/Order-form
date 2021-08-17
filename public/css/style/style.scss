@@ -37,3 +37,30 @@ $primary-color: #e54444;
 .border-dashed-bottom {
     border-bottom: 1px dashed #71a5a7;
 }
+
+/* Notification window */
+.notification-window {
+    position: fixed;
+    z-index: 1062;
+    right: 10px;
+    bottom: -1000px;
+    background: white;
+    border: 1px solid $primary-color;
+    -webkit-transition: all 1s ease;
+       -moz-transition: all 1s ease;
+        -ms-transition: all 1s ease;
+         -o-transition: all 1s ease;
+            transition: all 1s ease;
+    -webkit-box-shadow: 0 0 5px #dddddd30 !important;
+       -moz-box-shadow: 0 0 5px #dddddd30 !important;
+            box-shadow: 0 0 5px #dddddd30 !important;
+}
+
+.notification-window.sm-window {
+    min-width: 350px;
+    max-width: 450px;
+}
+
+.notification-window.show {
+    bottom: 10px;
+}

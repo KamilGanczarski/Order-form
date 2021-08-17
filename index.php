@@ -52,7 +52,7 @@
             </div>
         </div>
 
-        <!-- Login modal -->
+        <!-- Coupon code modal -->
         <div class="modal fade" id="coupon-modal" tabindex="-1"
             aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -61,7 +61,9 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body px-5 pb-2 mb-3">
-                        <label for="exampleInputEmail1" class="form-label text-custom h3">Kod rabatowy</label>
+                        <label for="exampleInputEmail1" class="form-label text-custom h3">
+                            Kod rabatowy
+                        </label>
                         <input type="email" class="form-control"
                             aria-describedby="coupon_code_input" v-model="coupon_code_input">
                         <p class="form-text pb-2">
@@ -72,6 +74,27 @@
                             Zatwierdź
                         </button>
                         <p class="pt-3 text-danger small">{{coupon_error}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coupon code modal -->
+        <div class="modal fade" id="order-success-modal" tabindex="-1"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header border-0">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body px-5 pb-2 mb-3">
+                        <label for="exampleInputEmail1" class="form-label text-custom h3">
+                            Twoje zamówienie
+                        </label>
+                        <input type="email" class="form-control"
+                            aria-describedby="coupon_code_input" v-model="coupon_code_input">
+                        <p v-for="mess in message" v-html="mess.text"
+                            v-bind:class="mess.style"></p>
                     </div>
                 </div>
             </div>
@@ -214,10 +237,10 @@
                 <i class="icon-credit-card"></i> 3. Metoda płatności
             </h6>
 
-            <div v-for="(Payment, i) in Payments" v-model="payment"
+            <div v-for="(Payment, i) in Payments"
                 class="form-check py-2 mx-3 d-flex align-items-center">
-                <input class="form-check-input" type="radio" id="radio-payment"
-                    v-bind:value="Payment" name="payment-radio"
+                <input class="form-check-input" type="radio" v-model="payment"
+                    id="radio-payment" v-bind:value="Payment" name="payment-radio"
                     v-bind:id="'payment-radio' + i" v-bind:disabled="Payment.disabled">
                 <label class="form-check-label w-100 d-flex align-items-center small"
                     v-bind:for="'payment-radio' + i">
@@ -257,8 +280,8 @@
                         <span>
                             {{ custom_price(price_native) }}
                         </span>
-                        <span v-if="active_coupons.length > 0">
-                            &nbsp;-&nbsp;{{ custom_price(active_coupons[0].percent*price_native) }}
+                        <span v-if="actives_coupons.length > 0">
+                            &nbsp;-&nbsp;{{ custom_price(actives_coupons[0].percent*price_native) }}
                         </span>
                         <span v-if="typeof delivery.price != 'undefined'">
                             &nbsp;+&nbsp;{{ custom_price(delivery.price) }}
@@ -273,12 +296,13 @@
 
             <div class="my-4">
                 <textarea class="form-control" id="exampleFormControlTextarea1"
-                    rows="3" placeholder="Komentarz"></textarea>
+                    rows="3" placeholder="Komentarz" v-model="comment"></textarea>
             </div>
 
             <!-- Accept newsletter -->
             <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" value="" id="accept-newsletter">
+                <input class="form-check-input" type="checkbox" value="" id="accept-newsletter"
+                    v-model="newsletter">
                 <label class="form-check-label ms-2 small" for="accept-newsletter">
                     Zapisz się, aby otrzymywać newsletter
                 </label>
@@ -286,16 +310,27 @@
 
             <!-- Accept restriction -->
             <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" value="" id="accept-restriction">
+                <input class="form-check-input" type="checkbox" value="" id="accept-restriction"
+                    v-model="restriction">
                 <label class="form-check-label ms-2 small" for="accept-restriction">
                     Zapoznałam/em się z <a href="#">Regulaminem</a> zakupów
                 </label>
             </div>
 
             <!-- Login -->
-            <button class="btn w-100 py-3 fw-bold btn-custom">
+            <button class="btn w-100 py-3 fw-bold btn-custom" v-on:click="set_order()">
                 Potwierdź zakupy
             </button>
+        </section>
+
+        <!-- Simple notification window -->
+        <section class="p-0 m-0 alert fade notification-window sm-window"
+            id="notification-window" role="alert">
+            <div onclick="document.querySelector('#notification-window').classList.remove('show');"
+                class="btn w-100 py-2 px-3 text-start text-light">
+                <p v-for="mess in message" v-html="mess.text"
+                    v-bind:class="mess.style"></p>
+            </div>
         </section>
     </article>
 

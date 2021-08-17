@@ -9,7 +9,7 @@ CREATE TABLE Coupon_code (
     `id` INT(3) NOT NULL AUTO_INCREMENT,
     `active` tinyint(1) NOT NULL,
     `code` VARCHAR(255) COLLATE utf8_polish_ci NOT NULL,
-    `percent` INT(11) NOT NULL,
+    `percent` FLOAT(11) NOT NULL,
 
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
@@ -22,7 +22,7 @@ INSERT INTO Coupon_code VALUES
 UNLOCK TABLES;
 
 
--- Table structure for table Users
+-- Table structure for table User
 DROP TABLE IF EXISTS User;
 CREATE TABLE User (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -41,7 +41,7 @@ INSERT INTO User VALUES
 UNLOCK TABLES;
 
 
--- Table structure for table Users
+-- Table structure for table Address
 DROP TABLE IF EXISTS Address;
 CREATE TABLE Address (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -62,7 +62,47 @@ INSERT INTO Address VALUES
 UNLOCK TABLES;
 
 
--- Table structure for table Users
+-- Table structure for table Order_info
+DROP TABLE IF EXISTS Order_info;
+CREATE TABLE Order_info (
+    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `user_id` INT(11) NOT NULL REFERENCES User (`id`),
+    `order_number` varchar(255) COLLATE utf8_polish_ci NOT NULL,
+    `price` FLOAT(11) NOT NULL,
+    `delivery_method` varchar(255) COLLATE utf8_polish_ci NOT NULL,
+    `payment_method` varchar(255) COLLATE utf8_polish_ci NOT NULL,
+    `comment` varchar(255) COLLATE utf8_polish_ci NOT NULL,
+
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+
+LOCK TABLES Order_info WRITE;
+INSERT INTO Order_info VALUES
+    (1, 1, 'asd7a8s7d9byp2ebbaps9dypq', 115.00, 'inpost', 'Bank transfer', '');
+
+UNLOCK TABLES;
+
+
+-- Table structure for table Delivery_method
+DROP TABLE IF EXISTS Delivery_method;
+CREATE TABLE Delivery_method (
+    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `description` varchar(255) COLLATE utf8_polish_ci NOT NULL,
+    `price` FLOAT(11) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+
+LOCK TABLES Delivery_method WRITE;
+INSERT INTO Delivery_method VALUES
+    (1, 'Paczkomaty 24/7', 10.99),
+    (2, 'Kurier DPD', 18.00),
+    (3, 'Kurier DPD pobranie', 22.00);
+
+UNLOCK TABLES;
+
+
+-- Table structure for table Country
 DROP TABLE IF EXISTS Country;
 CREATE TABLE Country (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -133,6 +173,12 @@ SELECT * FROM User;
 
 system echo 'Table: Address';
 SELECT * FROM Address;
+
+system echo 'Table: Order_info';
+SELECT * FROM Order_info;
+
+system echo 'Table: Delivery_method';
+SELECT * FROM Delivery_method;
 
 system echo 'Table: Country';
 SELECT * FROM Country;
