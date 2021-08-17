@@ -112,7 +112,7 @@ class Valid_data {
                 message: 'Nieprawidłowy numer telefonu (numer telefonu powinien mieć od 9 od 255 znaków)',
                 style: 'danger'
             };
-        } else if (!isNaN(text.replace(/\s/g, ''))) {
+        } else if (isNaN(text.replace(/\s/g, ''))) {
             return {
                 message: 'Nieprawidłowy numer telefonu (numer telefonu powinien zawierać tylko cyfry)',
                 style: 'danger'
