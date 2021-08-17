@@ -1,0 +1,18 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+<metadata>Copyright (C) 2021 by original authors @ fontello.com</metadata>
+<defs>
+<font id="fontello" horiz-adv-x="1000" >
+<font-face font-family="fontello" font-weight="400" font-stretch="normal" units-per-em="1000" ascent="850" descent="-150" />
+<missing-glyph horiz-adv-x="1000" />
+<glyph glyph-name="doc-text" unicode="&#xe800;" d="M678-119l-522 0q-65 0-110 46t-46 111l0 625q0 65 46 110t110 46l522 0q65 0 110-46t46-110l0-625q0-65-46-111t-110-46z m-522 834q-21 0-37-15t-15-37l0-625q0-21 15-37t37-16l522 0q21 0 36 16t15 37l0 625q0 21-15 37t-36 15l-522 0z m469-312l-416 0q-26 0-26 25 0 11 7 19t19 7l416 0q11 0 19-7t7-19q0-25-26-25z m0 156l-416 0q-11 0-19 8t-7 18q0 25 26 25l416 0q26 0 26-25 0-11-7-18t-19-8z m0-312l-416 0q-11 0-19 7t-7 19q0 25 26 25l416 0q26 0 26-25 0-11-7-19t-19-7z m0-157l-416 0q-26 0-26 25 0 12 7 19t19 8l416 0q11 0 19-8t7-19q0-25-26-25z" horiz-adv-x="834" />
+
+<glyph glyph-name="truck" unicode="&#xe801;" d="M357 64q0 29-21 51t-50 21-50-21-22-51 22-50 50-21 50 21 21 50z m-214 286h214v143h-88q-7 0-12-5l-109-109q-5-5-5-12v-17z m714-286q0 29-21 51t-50 21-50-21-22-51 22-50 50-21 50 21 21 50z m143 607v-571q0-8-2-15t-8-10-9-6-13-4-13-1-14 0-12 0q0-59-42-101t-101-42-101 42-42 101h-214q0-59-42-101t-101-42-101 42-42 101h-36q-1 0-12 0t-15 0-12 1-13 4-9 6-8 10-2 15q0 15 10 25t25 11v178q0 5 0 20t0 21 2 19 3 21 8 17 13 17l110 110q11 11 28 18t33 7h89v107q0 15 11 26t25 10h571q15 0 25-10t11-26z" horiz-adv-x="1000" />
+
+<glyph glyph-name="credit-card" unicode="&#xe812;" d="M50 650c-28 0-50-22-50-50l0-500c0-28 22-50 50-50l850 0c28 0 50 22 50 50l0 500c0 28-22 50-50 50z m-25-100l900 0 0-100-900 0z m25-300l150 0 0-100-150 0z m450-50l350 0 0-50-350 0z" horiz-adv-x="950" />
+
+<glyph glyph-name="user" unicode="&#xe81b;" d="M714 69q0-60-35-104t-84-44h-476q-49 0-84 44t-35 104q0 48 5 90t17 85 33 73 52 50 76 19q73-72 174-72t175 72q42 0 75-19t52-50 33-73 18-85 4-90z m-143 495q0-88-62-151t-152-63-151 63-63 151 63 152 151 63 152-63 62-152z" horiz-adv-x="714.3" />
+</font>
+</defs>
+</svg>
