@@ -20,7 +20,10 @@ Parameters to configure mysql connection
 ```
 
 ## Set app location
-App location to fetch data from api in resources/js/app-vue.js in property app_url,
+App location to fetch data from api in resources/js/app-vue.js in property app_url:
+```
+app_url: your_app_localisation + '/app/api/'
+```
 for example:
 ```
 app_url: 'http://localhost/all/order-form.pl/Order-form/app/api/'
